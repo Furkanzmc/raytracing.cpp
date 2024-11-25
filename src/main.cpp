@@ -22,7 +22,7 @@ int main()
 
     camera_t camera{.width = 2.0 * (double(image_width) / image_height),
                     .height = 2.0,
-                    .focal_length = 2.0,
+                    .focal_length = 1.0,
                     .center = point3{0, 0, 0},
                     .u = {},
                     .v = {}};
