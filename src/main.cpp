@@ -4,6 +4,9 @@
 #include "image.h"
 #include "ppm.h"
 #include "camera.h"
+#include "sphere.h"
+#include "hittable_list.h"
+#include "hittable.h"
 
 #include <iostream>
 
@@ -45,6 +48,10 @@ int main()
     image_t image{image_width, image_height};
     img::init(image);
 
+    hittable_list_t world{};
+    world.add(new sphere_t{point3{0, 0, -1}, 0.5});
+    world.add(new sphere_t{point3{0, -100.5, -1}, 100});
+
     ray_t ray{camera.center, {}};
     for (int j = 0; j < image_height; j++) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
@@ -52,7 +59,7 @@ int main()
             auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
             ray.direction = pixel_center - camera.center;
 
-            color pixel_color = ray::color_at(ray);
+            color pixel_color = ray::color_at(ray, world);
             img::set_pixel(image,
                            point2i{static_cast<double>(i), static_cast<double>(j), 0},
                            pixel_color);
@@ -61,5 +68,5 @@ int main()
 
     std::cout << image;
 
-    std::clog << "\rDone.                 \n";
+    std::clog << "\rDone!\n";
 }

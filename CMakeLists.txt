@@ -16,6 +16,15 @@ else()
   )
 endif()
 
-add_executable(${CMAKE_PROJECT_NAME} src/color.cpp src/ray.cpp src/vec3.cpp
-                                     src/main.cpp src/image.cpp src/ppm.cpp)
+add_executable(
+  ${CMAKE_PROJECT_NAME}
+  src/color.cpp
+  src/ray.cpp
+  src/vec3.cpp
+  src/main.cpp
+  src/image.cpp
+  src/ppm.cpp
+  src/hittable.cpp
+  src/hittable_list.cpp
+  src/sphere.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./src)

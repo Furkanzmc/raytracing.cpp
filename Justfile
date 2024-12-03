@@ -9,3 +9,6 @@ run:
 
 clean:
     rm -rf ./build/*
+
+conf-rel:
+    cmake -B build -DCMAKE_BUILD_TYPE=Release
