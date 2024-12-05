@@ -13,16 +13,17 @@ struct hit_record_t {
     bool is_hit{false};
 };
 
-class hittable_t {
-public:
-    virtual ~hittable_t() = default;
+struct hittable_t {
+    using hit_func =
+        std::function<hit_record_t(ray_t ray, double ray_tmin, double ray_tmax)>;
 
-    virtual hit_record_t hit(ray_t ray, double ray_tmin, double ray_tmax) const = 0;
+    hit_func hit{};
 };
 
 namespace hit_record {
 using unit_vec3 = vec3;
-hit_record_t set_face_normal(hit_record_t record, ray_t ray, unit_vec3 outward_normal);
+[[nodiscard]] hit_record_t set_face_normal(hit_record_t record, ray_t ray,
+                                           unit_vec3 outward_normal);
 } // namespace hit_record
 
 #endif

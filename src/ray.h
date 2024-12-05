@@ -12,8 +12,8 @@ struct ray_t {
 };
 
 namespace ray {
-point3 position(ray_t ray, double t);
-color color_at(ray_t ray, const hittable_list_t &world);
+[[nodiscard]] point3 position(ray_t ray, double t);
+[[nodiscard]] color color_at(ray_t ray, const hittable_list_t &world);
 } // namespace ray
 
 #endif

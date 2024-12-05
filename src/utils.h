@@ -4,9 +4,9 @@
 #include "constants.h"
 
 namespace math {
-inline double degrees_to_radians(double degrees)
+[[nodiscard]] inline double degrees_to_radians(double degrees)
 {
-    return degrees * PI / 180.0;
+    return degrees * PI_V / 180.0;
 }
 } // namespace math
 

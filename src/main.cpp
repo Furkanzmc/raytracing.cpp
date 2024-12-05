@@ -14,12 +14,10 @@ int main()
 {
     // Image
 
-    auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 400;
-
+    const auto aspect_ratio = 16.0 / 9.0;
     // Calculate the image height, and ensure that it's at least 1.
-    int image_height = int(image_width / aspect_ratio);
-    image_height = (image_height < 1) ? 1 : image_height;
+    const int image_width = 400;
+    const int image_height = std::max(1, int(image_width / aspect_ratio));
 
     // Camera
 
@@ -45,25 +43,33 @@ int main()
 
     // Render
 
+    hittable_list_t world{};
+    world.add(hit::make_sphere(point3{0, -100.5, -1}, 100));
+
+    hittable_list_t world_2{};
+    world.add(
+        {.hit = [&world_2](ray_t ray, double ray_tmin, double ray_tmax) -> hit_record_t {
+            return world_2.hit(ray, ray_tmin, ray_tmax);
+        }});
+    world_2.add(hit::make_sphere(point3{0, 100.5, -1}, 100));
+
+    world.add(hit::make_sphere(point3{0, 0, -1}, 0.5));
+
     image_t image{image_width, image_height};
     img::init(image);
 
-    hittable_list_t world{};
-    world.add(new sphere_t{point3{0, 0, -1}, 0.5});
-    world.add(new sphere_t{point3{0, -100.5, -1}, 100});
-
     ray_t ray{camera.center, {}};
-    for (int j = 0; j < image_height; j++) {
-        std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
-        for (int i = 0; i < image_width; i++) {
-            auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-            ray.direction = pixel_center - camera.center;
+    for (auto pos : image) {
+        std::clog << "\rScanlines remaining: " << (image.height - pos.y) << ' '
+                  << std::flush;
 
-            color pixel_color = ray::color_at(ray, world);
-            img::set_pixel(image,
-                           point2i{static_cast<double>(i), static_cast<double>(j), 0},
-                           pixel_color);
-        }
+        const auto pixel_center =
+            pixel00_loc + (pos.x * pixel_delta_u) + (pos.y * pixel_delta_v);
+        ray.direction = pixel_center - camera.center;
+
+        img::set_pixel(image,
+                       point2i{static_cast<double>(pos.x), static_cast<double>(pos.y), 0},
+                       ray::color_at(ray, world));
     }
 
     std::cout << image;

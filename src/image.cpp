@@ -4,14 +4,6 @@
 
 namespace img {
 
-std::size_t offset(const image_t &img, const point2i &pos)
-{
-    assert(pos.x() < img.width);
-    assert(pos.y() < img.height);
-
-    return pos.y() * img.width + pos.x();
-}
-
 void init(image_t &img)
 {
     assert(img.data.empty());
@@ -26,16 +18,21 @@ void init(image_t &img)
     }
 }
 
-void set_pixel(image_t &img, const point2i &pos, color cl)
+std::size_t offset(int width, point2i pos)
+{
+    assert(pos.x() < width);
+
+    return pos.y() * width + pos.x();
+}
+
+void set_pixel(image_t &img, point2i pos, color cl)
 {
     assert(img.data.size() > 0);
 
-    const auto index = offset(img, pos);
+    const auto index = offset(img.width, pos);
     assert(index < img.data.size());
 
-    img.data[index][0] = cl[0];
-    img.data[index][1] = cl[1];
-    img.data[index][2] = cl[2];
+    img.data[index] = std::move(cl);
 }
 
 } // namespace img

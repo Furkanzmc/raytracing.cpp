@@ -122,9 +122,9 @@ inline vec3 operator/(const vec3 &v, double t)
 
 namespace vec {
 
-double dot(const vec3 &u, const vec3 &v);
-vec3 cross(const vec3 &u, const vec3 &v);
-vec3 unit_vector(const vec3 &v);
+[[nodiscard]] double dot(const vec3 &u, const vec3 &v);
+[[nodiscard]] vec3 cross(const vec3 &u, const vec3 &v);
+[[nodiscard]] vec3 unit_vector(const vec3 &v);
 
 } // namespace vec
 
