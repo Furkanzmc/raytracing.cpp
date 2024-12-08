@@ -4,6 +4,7 @@
 #include "vec3.h"
 
 #include "ray.h"
+#include "interval.h"
 
 struct hit_record_t {
     point3 pos{};
@@ -14,8 +15,7 @@ struct hit_record_t {
 };
 
 struct hittable_t {
-    using hit_func =
-        std::function<hit_record_t(ray_t ray, double ray_tmin, double ray_tmax)>;
+    using hit_func = std::function<hit_record_t(ray_t ray, interval_t ray_inter)>;
 
     hit_func hit{};
 };

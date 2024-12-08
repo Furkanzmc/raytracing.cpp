@@ -26,5 +26,6 @@ add_executable(
   src/ppm.cpp
   src/hittable.cpp
   src/hittable_list.cpp
+  src/interval.cpp
   src/sphere.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./src)

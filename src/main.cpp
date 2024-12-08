@@ -7,6 +7,7 @@
 #include "sphere.h"
 #include "hittable_list.h"
 #include "hittable.h"
+#include "interval.h"
 
 #include <iostream>
 
@@ -47,10 +48,9 @@ int main()
     world.add(hit::make_sphere(point3{0, -100.5, -1}, 100));
 
     hittable_list_t world_2{};
-    world.add(
-        {.hit = [&world_2](ray_t ray, double ray_tmin, double ray_tmax) -> hit_record_t {
-            return world_2.hit(ray, ray_tmin, ray_tmax);
-        }});
+    world.add({.hit = [&world_2](ray_t ray, interval_t ray_inter) -> hit_record_t {
+        return world_2.hit(ray, ray_inter);
+    }});
     world_2.add(hit::make_sphere(point3{0, 100.5, -1}, 100));
 
     world.add(hit::make_sphere(point3{0, 0, -1}, 0.5));

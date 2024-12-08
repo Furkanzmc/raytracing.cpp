@@ -2,12 +2,13 @@
 
 #include "ray.h"
 #include "hittable.h"
+#include "interval.h"
 
 namespace hit {
 hittable_t make_sphere(point3 center, double radius)
 {
-    return {.hit = [m_center = std::move(center), m_radius = radius](
-                       ray_t ray, double ray_tmin, double ray_tmax) -> hit_record_t {
+    return {.hit = [m_center = std::move(center),
+                    m_radius = radius](ray_t ray, interval_t ray_inter) -> hit_record_t {
         const vec3 oc{m_center - ray.origin};
 
         const auto a = ray.direction.length_squared();
@@ -22,9 +23,9 @@ hittable_t make_sphere(point3 center, double radius)
         const double sqrtd = std::sqrt(discriminant);
         // Find the nearest root that lies in the acceptable range.
         double root{(h - sqrtd) / a};
-        if (root <= ray_tmin || root >= ray_tmax) {
+        if (!ray_inter.surrounds(root)) {
             root = (h + sqrtd) / a;
-            if (root <= ray_tmin || root >= ray_tmax) {
+            if (!ray_inter.surrounds(root)) {
                 return {};
             }
         }

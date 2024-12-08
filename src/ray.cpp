@@ -3,6 +3,7 @@
 #include "hittable_list.h"
 
 #include "constants.h"
+#include "interval.h"
 
 namespace ray {
 point3 position(ray_t ray, double t)
@@ -12,7 +13,7 @@ point3 position(ray_t ray, double t)
 
 color color_at(ray_t ray, const hittable_list_t &world)
 {
-    auto record = world.hit(ray, 0, INFINITY_V);
+    auto record = world.hit(ray, interval_t{.min = 0, .max = INFINITY_V});
     if (record.is_hit) {
         return 0.5 * (record.normal + color{1, 1, 1});
     }

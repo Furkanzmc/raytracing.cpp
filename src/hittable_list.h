@@ -10,7 +10,7 @@ public:
     void clear();
     void add(hittable_t object);
 
-    [[nodiscard]] hit_record_t hit(ray_t ray, double ray_tmin, double ray_tmax) const;
+    [[nodiscard]] hit_record_t hit(ray_t ray, interval_t ray_inter) const;
 
 private:
     std::vector<hittable_t> m_objects{};
