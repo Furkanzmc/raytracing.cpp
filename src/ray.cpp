@@ -1,9 +1,8 @@
 #include "ray.h"
 
-#include "hittable_list.h"
-
 #include "constants.h"
 #include "interval.h"
+#include "hittable.h"
 
 namespace ray {
 point3 position(ray_t ray, double t)
@@ -11,7 +10,7 @@ point3 position(ray_t ray, double t)
     return ray.origin + t * ray.direction;
 }
 
-color color_at(ray_t ray, const hittable_list_t &world)
+color color_at(ray_t ray, const hittable_t &world)
 {
     auto record = world.hit(ray, interval_t{.min = 0, .max = INFINITY_V});
     if (record.is_hit) {

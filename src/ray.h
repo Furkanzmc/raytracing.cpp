@@ -4,7 +4,7 @@
 #include "vec3.h"
 #include "color.h"
 
-class hittable_list_t;
+struct hittable_t;
 
 struct ray_t {
     point3 origin{};
@@ -13,7 +13,7 @@ struct ray_t {
 
 namespace ray {
 [[nodiscard]] point3 position(ray_t ray, double t);
-[[nodiscard]] color color_at(ray_t ray, const hittable_list_t &world);
+[[nodiscard]] color color_at(ray_t ray, const hittable_t &world);
 } // namespace ray
 
 #endif
