@@ -18,6 +18,8 @@ camera_t init(camera_t camera)
     camera.pixel00_loc =
         viewport_upper_left + 0.5 * (camera.pixel_delta_u + camera.pixel_delta_v);
 
+    camera.pixel_samples_scale = 1.0 / camera.samples_per_pixel;
+
     return camera;
 }
 } // namespace cam

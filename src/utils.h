@@ -8,6 +8,8 @@ namespace math {
 {
     return degrees * PI_V / 180.0;
 }
+
+[[nodiscard]] double random_double(double min, double max);
 } // namespace math
 
 #endif

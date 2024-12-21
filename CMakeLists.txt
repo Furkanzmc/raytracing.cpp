@@ -29,5 +29,6 @@ add_executable(
   src/interval.cpp
   src/render.cpp
   src/camera.cpp
+  src/utils.cpp
   src/sphere.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./src)

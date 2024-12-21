@@ -26,6 +26,7 @@ struct interval_t {
 namespace interval {
 interval_t empty() noexcept;
 interval_t universe() noexcept;
+double clamp(interval_t interval, double x) noexcept;
 } // namespace interval
 
 #endif

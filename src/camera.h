@@ -18,6 +18,11 @@ struct camera_t {
     vec3 pixel_delta_u{};
     vec3 pixel_delta_v{};
     vec3 pixel00_loc{};
+
+    int samples_per_pixel{10};
+
+    // Color scale factor for a sum of pixel samples.
+    double pixel_samples_scale{};
 };
 
 namespace cam {
