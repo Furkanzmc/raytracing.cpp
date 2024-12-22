@@ -26,7 +26,7 @@ int main()
                     .center = point3{0, 0, 0},
                     .image_width = image_width,
                     .image_height = image_height,
-                    .samples_per_pixel = 5};
+                    .samples_per_pixel = 25};
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges.
     camera.u = vec3{camera.width, 0, 0};

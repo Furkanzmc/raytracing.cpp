@@ -16,7 +16,7 @@ color color_at(ray_t ray, int depth, const hittable_t &world)
         return color{0, 0, 0};
     }
 
-    auto record = world.hit(ray, interval_t{.min = 0, .max = INFINITY_V});
+    auto record = world.hit(ray, interval_t{.min = 0.001, .max = INFINITY_V});
     if (record.is_hit) {
         const auto direction = vec::random_on_hemisphere(record.normal);
         return 0.5 * color_at(ray_t{record.pos, direction}, depth - 1, world);
