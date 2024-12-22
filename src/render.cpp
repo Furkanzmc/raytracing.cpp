@@ -34,8 +34,7 @@ void render(hittable_t world, camera_t camera) noexcept
     img::init(image);
 
     for (auto pos : image) {
-        std::clog << "\rScanlines remaining: " << (image.height - pos.y) << ' '
-                  << std::flush;
+        std::clog << "\rScanlines remaining: " << (image.height - pos.y) << std::flush;
 
         const point3 pos_d{
             point2i{static_cast<double>(pos.x), static_cast<double>(pos.y), 0}};

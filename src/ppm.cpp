@@ -3,6 +3,13 @@
 #include "interval.h"
 #include "image.h"
 
+namespace {
+double linear_to_gamma(double linear_cmp)
+{
+    return linear_cmp > 0 ? std::sqrt(linear_cmp) : 0;
+}
+} // namespace
+
 namespace ppm {
 void begin(std::ostream &out, const image_t &img) noexcept
 {
@@ -11,9 +18,9 @@ void begin(std::ostream &out, const image_t &img) noexcept
 
 void write_color(std::ostream &out, color pixel_color) noexcept
 {
-    const double r = pixel_color.x();
-    const double g = pixel_color.y();
-    const double b = pixel_color.z();
+    const double r = linear_to_gamma(pixel_color.x());
+    const double g = linear_to_gamma(pixel_color.y());
+    const double b = linear_to_gamma(pixel_color.z());
 
     auto clamp = [intr = interval_t{0.0, 0.999}](double val) {
         return interval::clamp(intr, val);
