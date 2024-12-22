@@ -45,7 +45,7 @@ void render(hittable_t world, camera_t camera) noexcept
             ray_t ray{get_ray(
                 point3{static_cast<double>(pos.x), static_cast<double>(pos.y), 0.0},
                 camera)};
-            pixel_color += ray::color_at(ray, world);
+            pixel_color += ray::color_at(ray, camera.max_depth, world);
         }
 
         img::set_pixel(image, pos_d, camera.pixel_samples_scale * pixel_color);

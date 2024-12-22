@@ -13,7 +13,7 @@ struct ray_t {
 
 namespace ray {
 [[nodiscard]] point3 position(ray_t ray, double t);
-[[nodiscard]] color color_at(ray_t ray, const hittable_t &world);
+[[nodiscard]] color color_at(ray_t ray, int depth, const hittable_t &world);
 } // namespace ray
 
 #endif

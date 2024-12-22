@@ -126,6 +126,12 @@ namespace vec {
 [[nodiscard]] vec3 cross(vec3 u, vec3 v);
 [[nodiscard]] vec3 unit_vector(vec3 v);
 
+[[nodiscard]] vec3 random(double min, double max);
+[[nodiscard]] vec3 random();
+
+[[nodiscard]] vec3 random_unit_vector();
+[[nodiscard]] vec3 random_on_hemisphere(vec3 normal);
+
 } // namespace vec
 
 #endif

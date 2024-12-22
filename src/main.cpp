@@ -26,7 +26,7 @@ int main()
                     .center = point3{0, 0, 0},
                     .image_width = image_width,
                     .image_height = image_height,
-                    .samples_per_pixel = 100};
+                    .samples_per_pixel = 5};
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges.
     camera.u = vec3{camera.width, 0, 0};
@@ -42,7 +42,7 @@ int main()
     world.add({.hit = [&world_2](ray_t ray, interval_t ray_inter) -> hit_record_t {
         return world_2.hit(ray, ray_inter);
     }});
-    world_2.add(hit::make_sphere(point3{0, 100.5, -1}, 100));
+    // world_2.add(hit::make_sphere(point3{0, 100.5, -1}, 100));
 
     world.add(hit::make_sphere(point3{0, 0, -1}, 0.5));
 

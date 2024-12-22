@@ -23,6 +23,8 @@ struct camera_t {
 
     // Color scale factor for a sum of pixel samples.
     double pixel_samples_scale{};
+
+    int max_depth{50};
 };
 
 namespace cam {

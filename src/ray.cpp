@@ -10,11 +10,16 @@ point3 position(ray_t ray, double t)
     return ray.origin + t * ray.direction;
 }
 
-color color_at(ray_t ray, const hittable_t &world)
+color color_at(ray_t ray, int depth, const hittable_t &world)
 {
+    if (depth <= 0) {
+        return color{0, 0, 0};
+    }
+
     auto record = world.hit(ray, interval_t{.min = 0, .max = INFINITY_V});
     if (record.is_hit) {
-        return 0.5 * (record.normal + color{1, 1, 1});
+        const auto direction = vec::random_on_hemisphere(record.normal);
+        return 0.5 * color_at(ray_t{record.pos, direction}, depth - 1, world);
     }
 
     const vec3 unit_direction = vec::unit_vector(ray.direction);
