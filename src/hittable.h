@@ -5,6 +5,7 @@
 
 #include "ray.h"
 #include "interval.h"
+#include "material.h"
 
 struct hit_record_t {
     point3 pos{};
@@ -12,12 +13,14 @@ struct hit_record_t {
     double t{};
     bool is_front_face{false};
     bool is_hit{false};
+    material_t material{};
 };
 
 struct hittable_t {
     using hit_func = std::function<hit_record_t(ray_t ray, interval_t ray_inter)>;
 
     hit_func hit{};
+    material_t material{};
 };
 
 namespace hit_record {

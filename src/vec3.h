@@ -18,27 +18,27 @@ public:
     {
     }
 
-    double x() const
+    [[nodiscard]] double x() const
     {
         return e[0];
     }
 
-    double y() const
+    [[nodiscard]] double y() const
     {
         return e[1];
     }
 
-    double z() const
+    [[nodiscard]] double z() const
     {
         return e[2];
     }
 
-    vec3 operator-() const
+    [[nodiscard]] vec3 operator-() const
     {
         return vec3{-e[0], -e[1], -e[2]};
     }
 
-    double operator[](int i) const
+    [[nodiscard]] double operator[](int i) const
     {
         return e[i];
     }
@@ -69,14 +69,20 @@ public:
         return *this *= 1 / t;
     }
 
-    double length() const
+    [[nodiscard]] double length() const
     {
         return std::sqrt(length_squared());
     }
 
-    double length_squared() const
+    [[nodiscard]] double length_squared() const
     {
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+    }
+
+    [[nodiscard]] bool is_near_zero() const
+    {
+        constexpr auto S = 1e-8;
+        return (std::fabs(e[0]) < S) && (std::fabs(e[1]) < S) && (std::fabs(e[2]) < S);
     }
 };
 
@@ -131,6 +137,7 @@ namespace vec {
 
 [[nodiscard]] vec3 random_unit_vector();
 [[nodiscard]] vec3 random_on_hemisphere(vec3 normal);
+[[nodiscard]] vec3 reflect(vec3 v, vec3 n);
 
 } // namespace vec
 

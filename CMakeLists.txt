@@ -30,5 +30,6 @@ add_executable(
   src/render.cpp
   src/camera.cpp
   src/utils.cpp
-  src/sphere.cpp)
+  src/sphere.cpp
+  src/material.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./src)

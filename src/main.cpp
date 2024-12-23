@@ -4,10 +4,8 @@
 #include "sphere.h"
 #include "hittable_list.h"
 #include "hittable.h"
-#include "interval.h"
 #include "render.h"
-
-#include <iostream>
+#include "material.h"
 
 int main()
 {
@@ -23,7 +21,7 @@ int main()
     camera_t camera{.width = 2.0 * (double(image_width) / image_height),
                     .height = 2.0,
                     .focal_length = 1.0,
-                    .center = point3{0, 0, 0},
+                    .center = {0, 0, 0},
                     .image_width = image_width,
                     .image_height = image_height,
                     .samples_per_pixel = 25};
@@ -36,18 +34,27 @@ int main()
     // Render
 
     hittable_list_t world{};
-    world.add(hit::make_sphere(point3{0, -100.5, -1}, 100));
 
-    hittable_list_t world_2{};
-    world.add({.hit = [&world_2](ray_t ray, interval_t ray_inter) -> hit_record_t {
-        return world_2.hit(ray, ray_inter);
-    }});
-    // world_2.add(hit::make_sphere(point3{0, 100.5, -1}, 100));
+    // Ground
+    world.add(hit::make_sphere({0, -100.5, -1.0}, 100.0,
+                               mat::make_lambertian({0.8, 0.8, 0.0})));
 
-    world.add(hit::make_sphere(point3{0, 0, -1}, 0.5));
+    // FIXME: The order of the objects here matter. I don't think it should...
 
-    hittable_t hit{.hit = [&world](ray_t ray, interval_t inter) {
-        return world.hit(ray, inter);
+    // Left sphere
+    world.add(
+        hit::make_sphere({-1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.8, 0.8}, 0.3)));
+
+    // Right sphere
+    world.add(
+        hit::make_sphere({1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.6, 0.2}, 1.0)));
+
+    // Center sphere
+    world.add(
+        hit::make_sphere({0.0, 0.0, -1.25}, 0.5, mat::make_lambertian({0.1, 0.2, 0.5})));
+
+    hittable_t hit{.hit = [world = std::move(world)](auto ray, auto interval) {
+        return world.hit(ray, interval);
     }};
     gr::render(hit, camera);
 }

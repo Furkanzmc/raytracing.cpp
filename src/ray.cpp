@@ -3,6 +3,9 @@
 #include "constants.h"
 #include "interval.h"
 #include "hittable.h"
+#include "material.h"
+
+#include <cassert>
 
 namespace ray {
 point3 position(ray_t ray, double t)
@@ -16,10 +19,14 @@ color color_at(ray_t ray, int depth, const hittable_t &world)
         return color{0, 0, 0};
     }
 
-    auto record = world.hit(ray, interval_t{.min = 0.001, .max = INFINITY_V});
+    const auto record = world.hit(ray, interval_t{.min = 0.001, .max = INFINITY_V});
     if (record.is_hit) {
-        const auto direction = record.normal + vec::random_unit_vector();
-        return 0.5 * color_at(ray_t{record.pos, direction}, depth - 1, world);
+        const auto response = record.material.scatter(ray, record);
+        if (response.is_reflected) {
+            return response.attenuation * color_at(response.scattered, depth - 1, world);
+        }
+
+        return {0, 0, 0};
     }
 
     const vec3 unit_direction = vec::unit_vector(ray.direction);

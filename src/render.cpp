@@ -10,7 +10,7 @@
 namespace {
 vec3 sample_square()
 {
-    return vec3{math::random_double(0, 0.5), math::random_double(0, 0.5), 0};
+    return {math::random_double(0, 0.5), math::random_double(0, 0.5), 0};
 }
 
 ray_t get_ray(point3 position, camera_t camera)
@@ -20,10 +20,7 @@ ray_t get_ray(point3 position, camera_t camera)
         ((position.x() + offset.x()) * camera.pixel_delta_u) +
         ((position.y() + offset.y()) * camera.pixel_delta_v);
 
-    const auto origin{camera.center};
-    const auto direction{pixel_sample - origin};
-
-    return ray_t{origin, direction};
+    return {.origin = camera.center, .direction = pixel_sample - camera.center};
 }
 } // namespace
 
@@ -36,9 +33,6 @@ void render(hittable_t world, camera_t camera) noexcept
     for (auto pos : image) {
         std::clog << "\rScanlines remaining: " << (image.height - pos.y) << std::flush;
 
-        const point3 pos_d{
-            point2i{static_cast<double>(pos.x), static_cast<double>(pos.y), 0}};
-
         color pixel_color{0, 0, 0};
         for (int sample = 0; sample < camera.samples_per_pixel; sample++) {
             ray_t ray{get_ray(
@@ -47,7 +41,9 @@ void render(hittable_t world, camera_t camera) noexcept
             pixel_color += ray::color_at(ray, camera.max_depth, world);
         }
 
-        img::set_pixel(image, pos_d, camera.pixel_samples_scale * pixel_color);
+        img::set_pixel(image,
+                       point2i{static_cast<double>(pos.x), static_cast<double>(pos.y), 0},
+                       camera.pixel_samples_scale * pixel_color);
     }
 
     std::cout << image;
