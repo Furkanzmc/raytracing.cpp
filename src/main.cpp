@@ -41,20 +41,24 @@ int main()
 
     // FIXME: The order of the objects here matter. I don't think it should...
 
+    constexpr vec3 left_position{-1.0, 0.0, -1.0};
+
     // Left sphere
-    world.add(
-        hit::make_sphere({-1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.8, 0.8}, 0.3)));
+    // world.add(hit::make_sphere(left_position, 0.5, mat::make_dielectric(1.5)));
+
+    // Left bubble
+    world.add(hit::make_sphere(left_position, 0.4, mat::make_dielectric(1.0 / 1.5)));
 
     // Right sphere
     world.add(
-        hit::make_sphere({1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.6, 0.2}, 1.0)));
+        hit::make_sphere({1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.6, 0.2}, 0.0)));
 
     // Center sphere
     world.add(
-        hit::make_sphere({0.0, 0.0, -1.25}, 0.5, mat::make_lambertian({0.1, 0.2, 0.5})));
+        hit::make_sphere({0.0, 0.0, -1.2}, 0.5, mat::make_lambertian({0.1, 0.2, 0.5})));
 
     hittable_t hit{.hit = [world = std::move(world)](auto ray, auto interval) {
         return world.hit(ray, interval);
     }};
-    gr::render(hit, camera);
+    gr::render(std::move(hit), std::move(camera));
 }

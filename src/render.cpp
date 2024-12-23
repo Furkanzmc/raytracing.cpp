@@ -31,7 +31,8 @@ void render(hittable_t world, camera_t camera) noexcept
     img::init(image);
 
     for (auto pos : image) {
-        std::clog << "\rScanlines remaining: " << (image.height - pos.y) << std::flush;
+        std::clog << "\rScanlines remaining: " << (image.height - pos.y) << ' '
+                  << std::flush;
 
         color pixel_color{0, 0, 0};
         for (int sample = 0; sample < camera.samples_per_pixel; sample++) {

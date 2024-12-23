@@ -2,6 +2,8 @@
 
 #include "utils.h"
 
+#include <cmath>
+
 namespace vec {
 
 double dot(vec3 u, vec3 v)
@@ -57,6 +59,16 @@ vec3 random_on_hemisphere(vec3 normal)
 vec3 reflect(vec3 v, vec3 n)
 {
     return v - 2 * dot(v, n) * n;
+}
+
+vec3 refract(vec3 uv, vec3 n, double etai_over_etat)
+{
+    const auto cos_theta = std::fmin(dot(-uv, n), 1.0);
+    const auto r_out_perp = etai_over_etat * (uv + cos_theta * n);
+    const auto r_out_parallel =
+        -std::sqrt(std::fabs(1.0 - r_out_perp.length_squared())) * n;
+
+    return r_out_perp + r_out_parallel;
 }
 
 } // namespace vec

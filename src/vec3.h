@@ -8,12 +8,12 @@ class vec3 {
 public:
     double e[3]{0, 0, 0};
 
-    vec3()
+    constexpr vec3()
         : e{0, 0, 0}
     {
     }
 
-    vec3(double e0, double e1, double e2)
+    constexpr vec3(double e0, double e1, double e2)
         : e{e0, e1, e2}
     {
     }
@@ -137,7 +137,9 @@ namespace vec {
 
 [[nodiscard]] vec3 random_unit_vector();
 [[nodiscard]] vec3 random_on_hemisphere(vec3 normal);
+
 [[nodiscard]] vec3 reflect(vec3 v, vec3 n);
+[[nodiscard]] vec3 refract(vec3 uv, vec3 n, double etai_over_etat);
 
 } // namespace vec
 

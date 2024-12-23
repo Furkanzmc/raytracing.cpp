@@ -26,8 +26,9 @@ struct material_t {
 };
 
 namespace mat {
-material_t make_lambertian(color albedo);
-material_t make_metal(color albedo, double fuzz);
+[[nodiscard]] material_t make_lambertian(color albedo);
+[[nodiscard]] material_t make_metal(color albedo, double fuzz);
+[[nodiscard]] material_t make_dielectric(double refraction_index);
 } // namespace mat
 
 #endif

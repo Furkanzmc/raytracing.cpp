@@ -2,6 +2,15 @@ local project_path = vim.fn.expand("$RAYTRACING_PATH")
 
 vim.keymap.set("n", "<leader>ab", ":Just build<CR>")
 vim.keymap.set("n", "<leader>ar", ":Just run<CR>")
+vim.keymap.set(
+    "n",
+    "<leader>ir",
+    ":call jobstart(['qlmanage', '-p', '"
+        .. vim.fn.expand("$RAYTRACING_PATH")
+        .. "/output.ppm"
+        .. "'])<CR>",
+    { silent = true }
+)
 
 local augroup_nvimrc = vim.api.nvim_create_augroup("nvimrc", { clear = true })
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
