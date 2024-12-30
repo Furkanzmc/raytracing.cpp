@@ -1,8 +1,6 @@
 #include "ray.h"
 #include "vec3.h"
 #include "camera.h"
-#include "sphere.h"
-#include "hittable_list.h"
 #include "hittable.h"
 #include "render.h"
 #include "material.h"
@@ -33,32 +31,32 @@ int main()
 
     // Render
 
-    hittable_list_t world{};
+    hittable_t world{};
 
     // Ground
-    world.add(hit::make_sphere({0, -100.5, -1.0}, 100.0,
-                               mat::make_lambertian({0.8, 0.8, 0.0})));
+    world.objects.push_back(hit::make_sphere({0, -100.5, -1.0}, 100.0,
+                                             mat::make_lambertian({0.8, 0.8, 0.0})));
 
     // FIXME: The order of the objects here matter. I don't think it should...
 
     constexpr vec3 left_position{-1.0, 0.0, -1.0};
 
     // Left sphere
-    // world.add(hit::make_sphere(left_position, 0.5, mat::make_dielectric(1.5)));
-
-    // Left bubble
-    world.add(hit::make_sphere(left_position, 0.4, mat::make_dielectric(1.0 / 1.5)));
+    hittable_t bubble{hit::make_sphere(left_position, 0.5, mat::make_dielectric(1.5))};
+    {
+        // Left bubble
+        bubble.objects.push_back(
+            hit::make_sphere(left_position, 0.4, mat::make_dielectric(1.0 / 1.5)));
+    }
+    world.objects.push_back(std::move(bubble));
 
     // Right sphere
-    world.add(
+    world.objects.push_back(
         hit::make_sphere({1.0, 0.0, -1.0}, 0.5, mat::make_metal({0.8, 0.6, 0.2}, 0.0)));
 
     // Center sphere
-    world.add(
+    world.objects.push_back(
         hit::make_sphere({0.0, 0.0, -1.2}, 0.5, mat::make_lambertian({0.1, 0.2, 0.5})));
 
-    hittable_t hit{.hit = [world = std::move(world)](auto ray, auto interval) {
-        return world.hit(ray, interval);
-    }};
-    gr::render(std::move(hit), std::move(camera));
+    gr::render(std::move(world), std::move(camera));
 }

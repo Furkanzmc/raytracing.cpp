@@ -25,11 +25,9 @@ add_executable(
   src/image.cpp
   src/ppm.cpp
   src/hittable.cpp
-  src/hittable_list.cpp
   src/interval.cpp
   src/render.cpp
   src/camera.cpp
   src/utils.cpp
-  src/sphere.cpp
   src/material.cpp)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./src)

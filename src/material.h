@@ -4,7 +4,7 @@
 #include "ray.h"
 #include "color.h"
 
-#include <functional>
+#include <memory>
 #include <string>
 
 struct hit_record_t;
@@ -16,13 +16,17 @@ struct material_t {
         bool is_reflected{false};
     };
 
-    using scatter_function = std::function<scatter_response_t(const material_t &, ray_t,
-                                                              const hit_record_t &)>;
+    using scatter_function = scatter_response_t (*)(const material_t &, ray_t,
+                                                    const hit_record_t &);
 
     std::string name{};
+
+    struct data_t;
+    std::shared_ptr<data_t> data{nullptr};
     scatter_function scatter_func{};
 
-    scatter_response_t scatter(ray_t ray, const hit_record_t &record) const;
+    ~material_t();
+    [[nodiscard]] scatter_response_t scatter(ray_t ray, const hit_record_t &record) const;
 };
 
 namespace mat {

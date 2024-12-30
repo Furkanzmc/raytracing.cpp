@@ -19,7 +19,7 @@ color color_at(ray_t ray, int depth, const hittable_t &world)
         return {0, 0, 0};
     }
 
-    const auto record = world.hit(ray, {.min = 0.001, .max = INFINITY_V});
+    const auto record = hit::hit(world, ray, {.min = 0.001, .max = INFINITY_V});
     if (record.is_hit) {
         const auto response = record.material.scatter(ray, record);
         if (response.is_reflected) {
