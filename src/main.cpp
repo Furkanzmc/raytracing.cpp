@@ -3,7 +3,55 @@
 #include "camera.h"
 #include "hittable.h"
 #include "render.h"
+#include "utils.h"
 #include "material.h"
+
+namespace {
+hittable_t create_final_scene()
+{
+    hittable_t world =
+        hit::make_sphere({0, -1000, 0}, 1000, mat::make_lambertian({0.5, 0.5, 0.5}));
+
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            const auto choose_mat = math::random_double(0, 1);
+            const point3 center{a + 0.9 * math::random_double(0, 1), 0.2,
+                                b + 0.9 * math::random_double(0, 1)};
+
+            if ((center - point3{4, 0.2, 0}).length() > 0.9) {
+                if (choose_mat < 0.8) {
+                    // Diffuse
+                    auto albedo = vec::random() * vec::random();
+                    world.objects.push_back(hit::make_sphere(
+                        center, 0.2, mat::make_lambertian(std::move(albedo))));
+                }
+                else if (choose_mat < 0.95) {
+                    // Metal
+                    world.objects.push_back(
+                        hit::make_sphere(center, 0.2,
+                                         mat::make_metal(vec::random(0.5, 1),
+                                                         math::random_double(0, 0.5))));
+                }
+                else {
+                    // Glass
+                    world.objects.push_back(
+                        hit::make_sphere(center, 0.2, mat::make_dielectric(1.5)));
+                }
+            }
+        }
+    }
+
+    world.objects.push_back(
+        hit::make_sphere({-4, 1, 0}, 1.0, mat::make_lambertian({0.4, 0.2, 0.1})));
+
+    world.objects.push_back(hit::make_sphere({0, 1, 0}, 1.0, mat::make_dielectric(1.5)));
+
+    world.objects.push_back(
+        hit::make_sphere({4, 1, 0}, 1.0, mat::make_metal({0.7, 0.6, 0.5}, 0.0)));
+
+    return world;
+}
+} // namespace
 
 int main()
 {
@@ -11,52 +59,23 @@ int main()
 
     const auto aspect_ratio = 16.0 / 9.0;
     // Calculate the image height, and ensure that it's at least 1.
-    const int image_width = 400;
+    const int image_width = 500;
     const int image_height = std::max(1, int(image_width / aspect_ratio));
 
     // Camera
 
     camera_t camera = cam::init({.image_width = image_width,
                                  .image_height = image_height,
-                                 .samples_per_pixel = 25,
-                                 .vfov = 20,
-                                 .look_from = {-2, 2, 1},
-                                 .look_at = {0, 0, -1},
+                                 .samples_per_pixel = 50,
+                                 .max_depth = 10,
+                                 .vfov = 25,
+                                 .look_from = {13, 2, 3},
+                                 .look_at = {0, 0, 0},
                                  .vup = {0, 1, 0},
-                                 .defocus_angle = 10,
-                                 .focus_dist = 3.4});
+                                 .defocus_angle = 0.6,
+                                 .focus_dist = 10});
 
     // Render
 
-    hittable_t world{};
-
-    constexpr vec3 ground_position{0, -100.5, -1};
-    constexpr vec3 left_position{-1.0, 0.0, -1.0};
-    constexpr vec3 right_position{1, 0, -1};
-    constexpr vec3 center_position{0, 0, -1.2};
-
-    // Ground
-    world.objects.push_back(
-        hit::make_sphere(ground_position, 100.0, mat::make_lambertian({0.8, 0.8, 0.0})));
-
-    // FIXME: The order of the objects here matter. I don't think it should...
-
-    // Left sphere
-    hittable_t bubble{hit::make_sphere(left_position, 0.5, mat::make_dielectric(1.5))};
-    {
-        // Left bubble
-        bubble.objects.push_back(
-            hit::make_sphere(left_position, 0.4, mat::make_dielectric(1.0 / 1.5)));
-    }
-    world.objects.push_back(std::move(bubble));
-
-    // Right sphere
-    world.objects.push_back(
-        hit::make_sphere(right_position, 0.5, mat::make_metal({0.8, 0.6, 0.2}, 0.0)));
-
-    // Center sphere
-    world.objects.push_back(
-        hit::make_sphere(center_position, 0.5, mat::make_lambertian({0.1, 0.2, 0.5})));
-
-    gr::render(std::move(world), std::move(camera));
+    gr::render(create_final_scene(), std::move(camera));
 }
