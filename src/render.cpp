@@ -13,6 +13,13 @@ vec3 sample_square()
     return {math::random_double(0, 0.5), math::random_double(0, 0.5), 0};
 }
 
+point3 defocus_disk_sample(const camera_t &camera)
+{
+    auto p = vec::random_in_unit_disk();
+    return camera.center + (p.x() * camera.defocus_disk_u) +
+        (p.y() * camera.defocus_disk_v);
+}
+
 ray_t get_ray(point3 position, camera_t camera)
 {
     const auto offset = sample_square();
@@ -20,7 +27,9 @@ ray_t get_ray(point3 position, camera_t camera)
         ((position.x() + offset.x()) * camera.pixel_delta_u) +
         ((position.y() + offset.y()) * camera.pixel_delta_v);
 
-    return {.origin = camera.center, .direction = pixel_sample - camera.center};
+    const auto ray_origin =
+        (camera.defocus_angle <= 0 ? camera.center : defocus_disk_sample(camera));
+    return {.origin = ray_origin, .direction = pixel_sample - ray_origin};
 }
 } // namespace
 

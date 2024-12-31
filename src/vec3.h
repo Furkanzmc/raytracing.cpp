@@ -136,6 +136,7 @@ namespace vec {
 [[nodiscard]] vec3 random();
 
 [[nodiscard]] vec3 random_unit_vector();
+[[nodiscard]] vec3 random_in_unit_disk();
 [[nodiscard]] vec3 random_on_hemisphere(vec3 normal);
 
 [[nodiscard]] vec3 reflect(vec3 v, vec3 n);

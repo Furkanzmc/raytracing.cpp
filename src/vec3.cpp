@@ -46,6 +46,16 @@ vec3 random_unit_vector()
     }
 }
 
+vec3 random_in_unit_disk()
+{
+    while (true) {
+        const vec3 p{math::random_double(-1, 1), math::random_double(-1, 1), 0};
+        if (p.length_squared() < 1.0) {
+            return p;
+        }
+    }
+}
+
 vec3 random_on_hemisphere(vec3 normal)
 {
     const auto on_unit_sphere = random_unit_vector();

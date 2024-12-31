@@ -6,11 +6,11 @@
 struct camera_t {
     double width{};
     double height{};
-    double focal_length{};
+    vec3 center{0.0, 0.0, 0.0};
 
-    vec3 center{};
     vec3 u{};
     vec3 v{};
+    vec3 w{};
 
     int image_width{};
     int image_height{};
@@ -24,7 +24,18 @@ struct camera_t {
     // Color scale factor for a sum of pixel samples.
     double pixel_samples_scale{};
 
-    int max_depth{50};
+    int max_depth{20};
+    double vfov{90};
+
+    point3 look_from{0, 0, 0};
+    point3 look_at{0, 0, -1};
+    vec3 vup{0, 1, 0};
+
+    double defocus_angle{10};
+    double focus_dist{3.4};
+
+    vec3 defocus_disk_u{};
+    vec3 defocus_disk_v{};
 };
 
 namespace cam {
