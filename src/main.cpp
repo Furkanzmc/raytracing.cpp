@@ -12,8 +12,9 @@ hittable_t create_final_scene()
     hittable_t world =
         hit::make_sphere({0, -1000, 0}, 1000, mat::make_lambertian({0.5, 0.5, 0.5}));
 
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
+    constexpr int count{11};
+    for (int a = count * -1; a < count; a++) {
+        for (int b = count * -1; b < count; b++) {
             const auto choose_mat = math::random_double(0, 1);
             const point3 center{a + 0.9 * math::random_double(0, 1), 0.2,
                                 b + 0.9 * math::random_double(0, 1)};

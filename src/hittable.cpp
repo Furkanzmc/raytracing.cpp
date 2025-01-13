@@ -64,19 +64,15 @@ hittable_t make_sphere(point3 center, double radius, material_t material)
 
 hit_record_t hit(const hittable_t &world, ray_t ray, interval_t ray_inter)
 {
-#if 0
-    bool hit_anything{false};
     auto closest_so_far = ray_inter.max;
-#endif
+    hit_record_t rec = world.hit
+        ? world.hit(world, ray, {.min = ray_inter.min, .max = closest_so_far})
+        : hit_record_t{};
 
-    hit_record_t rec = world.hit ? world.hit(world, ray, ray_inter) : hit_record_t{};
     for (const auto &object : world.objects) {
-        auto record = hit(object, ray, ray_inter);
+        auto record = hit(object, ray, {.min = ray_inter.min, .max = closest_so_far});
         if (record.is_hit) {
-#if 0
-            hit_anything = true;
             closest_so_far = record.t;
-#endif
             rec = std::move(record);
         }
     }
